@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+set -x
 
 SCRIPT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -37,6 +38,8 @@ function update_metadata_config {
     yq w -i --style double "$values_yaml_path" 'presto.coordinator.config.clpProperties.metadata.database.name' "$name"
     yq w -i --style double "$values_yaml_path" 'presto.coordinator.config.clpProperties.metadata.database.user' "$user"
     yq w -i --style double "$values_yaml_path" 'presto.coordinator.config.clpProperties.metadata.database.password' "$password"
+    
+    mysql -h "$host" -P "$port" -u "$user" -p"$password" clp-db -e "UPDATE clp_datasets SET archive_storage_directory = '/var/data/archives/default';"
 }
 
 if declare -f "$1" > /dev/null; then
