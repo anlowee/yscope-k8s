@@ -1,0 +1,52 @@
+apiVersion: "v1"
+kind: "ConfigMap"
+metadata:
+  name: "presto-coordinator-config"
+data:
+  clp.properties: |
+    connector.name=clp
+    clp.metadata-provider-type={{ .Values.presto.coordinator.config.clpProperties.metadata.providerType }}
+    clp.metadata-db-url={{ .Values.presto.coordinator.config.clpProperties.metadata.database.url }}
+    clp.metadata-db-name={{ .Values.presto.coordinator.config.clpProperties.metadata.database.name }}
+    clp.metadata-db-user={{ .Values.presto.coordinator.config.clpProperties.metadata.database.user }}
+    clp.metadata-db-password={{ .Values.presto.coordinator.config.clpProperties.metadata.database.password }}
+    clp.metadata-table-prefix={{ .Values.presto.coordinator.config.clpProperties.metadata.tablePrefix }}
+    clp.split-provider-type={{ .Values.presto.coordinator.config.clpProperties.splitProvider }}
+    clp.metadata-filter-config=/opt/presto-server/etc/metadata-filter.json
+
+  config.properties: |
+    coordinator=true
+    node-scheduler.include-coordinator=false
+    http-server.http.port={{ .Values.presto.coordinator.httpPort }}
+    query.max-memory={{ .Values.presto.coordinator.config.configProperties.query.maxMemory }}
+    query.max-memory-per-node={{ .Values.presto.coordinator.config.configProperties.query.maxMemoryPerNode }}
+    discovery-server.enabled=true
+    discovery.uri=http://{{ .Values.presto.coordinator.serviceName }}:{{ .Values.presto.coordinator.httpPort }}
+    optimizer.optimize-hash-generation=false
+    regex-library=RE2J
+    use-alternative-function-signatures=true
+    inline-sql-functions=false
+    nested-data-serialization-enabled=false
+    native-execution-enabled=true
+
+  jvm.config: |
+    -server
+    -Xmx{{ .Values.presto.coordinator.config.jvmConfig.maxHeapSize }}
+    -XX:+UseG1GC
+    -XX:G1HeapRegionSize={{ .Values.presto.coordinator.config.jvmConfig.g1HeapRegionSize }}
+    -XX:+UseGCOverheadLimit
+    -XX:+ExplicitGCInvokesConcurrent
+    -XX:+HeapDumpOnOutOfMemoryError
+    -XX:+ExitOnOutOfMemoryError
+    -Djdk.attach.allowAttachSelf=true
+
+  log.properties: |
+    com.facebook.presto={{ .Values.presto.coordinator.config.logProperties.level }}
+
+  metadata-filter.json: |
+    {
+    }
+
+  node.properties: |
+    node.environment={{ .Values.presto.coordinator.config.nodeProperties.environment }}
+    node.id={{ .Values.presto.coordinator.serviceName }}

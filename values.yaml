@@ -1,0 +1,36 @@
+# Configure Presto
+presto:
+  coordinator:
+    config:
+      clpProperties:
+        metadata:
+          providerType: "mysql"
+          database:
+            url: "jdbc:mysql://localhost:6001"
+            name: "clp-db"
+            user: "clp-user"
+            password: "123456"
+          tablePrefix: "clp_"
+        splitProvider: "mysql"
+      configProperties:
+        query:
+          maxMemory: "1GB"
+          maxMemoryPerNode: "1GB"
+      jvmConfig:
+        maxHeapSize: "4G"
+        g1HeapRegionSize: "32M"
+      logProperties:
+        level: "DEBUG"
+      nodeProperties:
+        environment: "production"
+    httpPort: 8080
+    image: "ghcr.io/y-scope/presto/coordinator:dev"
+    serviceName: "presto-coordinator"
+  worker:
+    config:
+      nodeProperties:
+        location: "production-location"
+    httpPort: 7777
+    image: "ghcr.io/y-scope/presto/prestissimo-worker:dev"
+    serviceName: "presto-worker"
+    replicaCount: 1
