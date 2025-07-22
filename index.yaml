@@ -3,12 +3,12 @@ entries:
   presto-velox:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-07-22T11:22:10.2826802-04:00"
+    created: "2025-07-22T22:34:33.048510736Z"
     description: A Helm chart for Kubernetes
-    digest: 59e60fa5cbbebdbf196db175d0348212bfe5c33a382c4497834605c59f36131d
+    digest: 5bc41b6e30d21102c3d6e24ffd82277fd95f30340cd6b31785b8511deb639f7d
     name: presto-velox
     type: application
     urls:
     - https://anlowee.github.io/yscope-k8s/presto-velox-0.1.0.tgz
     version: 0.1.0
-generated: "2025-07-22T11:22:10.275210359-04:00"
+generated: "2025-07-22T22:34:33.048001794Z"
